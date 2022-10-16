@@ -29,7 +29,11 @@ class _TinderCardState extends State<TinderCard> {
         onPanStart: onPanStart,
         onPanUpdate: onPanUpdate,
         onPanEnd: onPanEnd,
-        child: TinderCardView(user: widget.user),
+        child: Builder(builder: (context) {
+          return AnimatedContainer(
+            child: TinderCardView(user: widget.user),
+          );
+        }),
       ),
     );
   }
