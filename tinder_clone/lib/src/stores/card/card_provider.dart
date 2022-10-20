@@ -124,6 +124,7 @@ class CardProvider extends ChangeNotifier {
 
     _nextCard();
 
+// this is needed for the transform or aniamted container to know if the position changed, so it can animated
     notifyListeners();
   }
 
