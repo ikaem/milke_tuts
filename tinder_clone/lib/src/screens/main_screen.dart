@@ -63,6 +63,17 @@ class _MainScreenState extends State<MainScreen> {
     final provider = Provider.of<CardProvider>(context);
     final users = provider.users;
 
+    if (users.isEmpty) {
+      return Center(
+        child: TextButton(
+          child: const Text("Reset"),
+          onPressed: () {
+            provider.resetUsers();
+          },
+        ),
+      );
+    }
+
     return Stack(
       children: users
           .map((u) => TinderCard(

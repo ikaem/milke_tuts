@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:math' hide log;
 
 import 'package:flutter/material.dart';
@@ -6,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:tinder_clone/src/models/user.dart';
 import 'package:tinder_clone/src/stores/card/card_provider.dart';
 import 'package:tinder_clone/src/widgets/tinder_card_view.dart';
+import 'package:tinder_clone/src/widgets/tinder_status_stamp.dart';
 
 class TinderCard extends StatefulWidget {
   const TinderCard({super.key, required this.user, required this.isFrontCard});
@@ -59,8 +59,6 @@ class _TinderCardState extends State<TinderCard> {
                   ..rotateZ(angleInDegrees)
                   ..translate(-center.dx, -center.dy);
 
-                log("$rotatedMatrix, $angleInDegrees, $angle, $center");
-
                 return AnimatedContainer(
                   duration: Duration(milliseconds: milliseconds),
                   curve: Curves.easeInOut,
@@ -72,7 +70,19 @@ class _TinderCardState extends State<TinderCard> {
                   //     position.dx,
                   //     position.dy,
                   //   ),
-                  child: TinderCardView(user: widget.user),
+                  child: Stack(
+                    children: [
+                      TinderCardView(user: widget.user),
+                      Center(
+                        // top: 20,
+                        // left: 50,
+                        child: Transform.rotate(
+                          angle: 0.2,
+                          child: const TinderStatusStamp(),
+                        ),
+                      ),
+                    ],
+                  ),
                 );
               }),
             ),

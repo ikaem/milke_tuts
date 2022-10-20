@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:tinder_clone/src/models/user.dart';
 import 'package:tinder_clone/src/utils/enums.dart';
@@ -20,7 +22,8 @@ class CardProvider extends ChangeNotifier {
   List<User> get users => _users;
 
   void resetUsers() {
-    _users = mockUsers;
+    _users = [...mockUsers];
+    notifyListeners();
   }
 
   void setScreenSize(Size size) {
@@ -59,6 +62,17 @@ class CardProvider extends ChangeNotifier {
           like();
           break;
         }
+      case CardStatus.dislike:
+        {
+          dislike();
+          break;
+        }
+
+      case CardStatus.superlike:
+        {
+          superlike();
+          break;
+        }
       default:
         {
           resetPosition();
@@ -77,6 +91,10 @@ class CardProvider extends ChangeNotifier {
 
   CardStatus? getStatus() {
     final x = _position.dx;
+    final y = _position.dy;
+
+    log("this is x: $x");
+    log("this is y: $y");
 
     const delta = 100;
 
@@ -87,12 +105,32 @@ class CardProvider extends ChangeNotifier {
     if (x <= -delta) {
       return CardStatus.dislike;
     }
+
+    if (y <= -delta * 3) return CardStatus.superlike;
+
     return null;
+  }
+
+  void superlike() {
+    _angle = 0;
+    _position = _position - Offset(0, _screenSize.height);
+    _nextCard();
+  }
+
+  void dislike() {
+    _angle = -20;
+    _position = _position - Offset(_screenSize.width, 0);
+    // Future.delayed(const Duration(milliseconds: 500), _nextCard);
+
+    _nextCard();
+
+    notifyListeners();
   }
 
   void like() {
     _angle = 20;
     _position = _position + Offset(2 * _screenSize.width / 2, 0);
+    Future.delayed(const Duration(milliseconds: 500), _nextCard);
     _nextCard();
 
     // notifyListeners();
